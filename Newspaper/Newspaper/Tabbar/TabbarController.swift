@@ -9,6 +9,9 @@ import UIKit
 
 class TabbarController: UITabBarController {
     
+    var email: String?
+    var pass: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.hidesBackButton = true

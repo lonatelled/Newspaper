@@ -12,5 +12,4 @@ class ProfileTableViewCell: UITableViewCell {
     @IBOutlet weak var picture: UIImageView!
     @IBOutlet weak var menuName: UILabel!
     
-
 }

@@ -1,17 +1,17 @@
 //
-//  SearchViewController.swift
+//  PageViewController.swift
 //  Newspaper
 //
-//  Created by Дарья Каркоцкая on 7.05.22.
+//  Created by Дарья Каркоцкая on 13.05.22.
 //
 
 import UIKit
 
-class SearchViewController: UIViewController {
+class PageViewController: UIPageViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Search"
+
         // Do any additional setup after loading the view.
     }
     
