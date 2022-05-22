@@ -9,6 +9,8 @@ import UIKit
 
 class ProfileDetailVC: UIViewController {
     
+    // MARK: — Outlets
+    
     var name: String?
     
     let cells = [""]
@@ -24,8 +26,8 @@ class ProfileDetailVC: UIViewController {
         avatarImage.addGestureRecognizer(tapGesture)
         avatarImage.isUserInteractionEnabled = true
         avatarImage.layer.borderWidth = 3.0
-        
     }
+    
     
     @objc func tapOnImage(_ sender: UITapGestureRecognizer) {
         let alert = UIAlertController(title: "Изображение", message: nil, preferredStyle: .actionSheet)

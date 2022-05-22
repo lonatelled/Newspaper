@@ -10,6 +10,9 @@ import SafariServices
 
 class OneNewsViewController: UIViewController {
     
+    // MARK: — Outlets
+    
+    var index: Int = 0
     var article: Article!
 
     @IBOutlet weak var imageView: UIImageView!
@@ -17,14 +20,12 @@ class OneNewsViewController: UIViewController {
     @IBOutlet weak var labelDescription: UILabel!
     @IBOutlet weak var safariBtn: UIButton!
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         labelTitle.text = article.title
         labelDescription.text = article.description
         
-        //Чтобы уменьшить задержку сделаем в отдельном потоке
+        // для уменьшения задержки
         DispatchQueue.main.async {
             if let url = URL(string: self.article.urlToImage) {
                 if let data = try? Data(contentsOf: url) {
@@ -38,21 +39,12 @@ class OneNewsViewController: UIViewController {
         }
     }
     
+    // MARK: — Actions
+    
     @IBAction func pushOpenAction(_ sender: UIButton) {
         if let url = URL(string: article.url) {
             let svc = SFSafariViewController(url: url)
             present(svc, animated: true, completion: nil)
         }
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

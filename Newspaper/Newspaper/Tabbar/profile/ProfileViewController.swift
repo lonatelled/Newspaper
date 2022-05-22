@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -13,8 +15,19 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
+    
+    // MARK: — Actions
+    
+    @IBAction func logoutAction(_ sender: UIButton) {
+        do {
+            try Auth.auth().signOut()
+        } catch {
+            print(error)
+        }
+    }
+    
+    // MARK: — Functions
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cells.count

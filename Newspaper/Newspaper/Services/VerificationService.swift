@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: — Password strenght
+
 enum PasswordStrength: Int {
     case veryWeak
     case weak
@@ -14,6 +16,8 @@ enum PasswordStrength: Int {
     case notVeryStrong
     case strong
 }
+
+// MARK: — Verification service
 
 final class VerificationService {
     
@@ -33,7 +37,6 @@ final class VerificationService {
         let fullnamePred = NSPredicate(format:"SELF MATCHES %@", fullnameRegEx)
         return fullnamePred.evaluate(with: fullname)
     }
-    
     
     static func isValidPassword(pass: String) -> PasswordStrength {
         if NSPredicate(format: "SELF MATCHES %@", strongRegex).evaluate(with: pass) {

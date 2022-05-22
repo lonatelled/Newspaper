@@ -1,14 +1,17 @@
 //
-//  AuthViewController.swift
+//  ViewController.swift
 //  Newspaper
 //
-//  Created by Дарья Каркоцкая on 8.05.22.
+//  Created by Дарья Каркоцкая on 7.05.22.
 //
 
 import UIKit
 import Firebase
+import FirebaseAuth
 
-class AuthViewController: UIViewController {
+final class SignUpViewController: UIViewController {
+    
+    // MARK: - Outlets
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var nameField: UITextField!
@@ -29,6 +32,8 @@ class AuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    // MARK: - Actions
     
     @IBAction func fullnameTFChanged(_ sender: UITextField) {
         guard let fullname = sender.text else { return }
@@ -61,16 +66,6 @@ class AuthViewController: UIViewController {
         updatePassErrorLbl(pass1: pass1, pass2: pass2)
         updateBtnState()
     }
-
-    private func updatePassErrorLbl(pass1: String, pass2: String) {
-    isConfPass = VerificationService.isPassCofirm(pass1: pass1, pass2: pass2)
-    errorLblSecondPass.isHidden = isConfPass
-    }
-    
-    private func updateBtnState() {
-        enterButton.isEnabled = isValidEmail &&
-            isConfPass && (passwordStrength != .veryWeak)
-    }
     
     @IBAction func swithLogin(_ sender: UIButton) {
         let name = nameField.text!
@@ -84,15 +79,27 @@ class AuthViewController: UIViewController {
                         if let result = result {
                             print(result.user.uid)
                             let ref = Database.database().reference().child("users")
-                            ref.child(result.user.uid).updateChildValues(["name": name, "email" : email])
-                            
-                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                            let vc = storyboard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
-                            self.navigationController?.pushViewController(vc, animated: true)
+                            ref.child(result.user.uid).updateChildValues(["name" : name, "email" : email])
                         }
+                    } else {
+                        print("error")
                     }
                 }
             }
         }
     }
+    
+    // MARK: - Private funtions
+
+    private func updatePassErrorLbl(pass1: String, pass2: String) {
+    isConfPass = VerificationService.isPassCofirm(pass1: pass1, pass2: pass2)
+    errorLblSecondPass.isHidden = isConfPass
+    }
+    
+    private func updateBtnState() {
+        enterButton.isEnabled = isValidEmail &&
+            isConfPass && (passwordStrength != .veryWeak)
+    }
 }
+    
+
