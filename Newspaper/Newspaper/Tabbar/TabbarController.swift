@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import Firebase
 
 final class TabbarController: UITabBarController {
     
+    var user: User?
     var email: String?
     var pass: String?
     
@@ -16,5 +18,4 @@ final class TabbarController: UITabBarController {
         super.viewDidLoad()
         self.navigationItem.hidesBackButton = true
     }
-
 }

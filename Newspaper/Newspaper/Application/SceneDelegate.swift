@@ -10,14 +10,43 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    let userDefaults = UserDefaults.standard
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
+        
+//        userDefaults.set(false, forKey: "isLogin")
+        let isLogin = userDefaults.object(forKey: "isLogin") as? Bool ?? false
+
+        if isLogin {
+            startApp()
+        } else {
+            startLogin()
+        }
+
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window?.windowScene = windowScene
     }
+    
+    func startApp() {
+        let startVC = UIStoryboard(name: "Tabbar", bundle: nil).instantiateViewController(withIdentifier: "Tabbar")
+        self.window?.rootViewController = startVC
+        self.window?.makeKeyAndVisible()
+    }
 
+    func startLogin() {
+        let loginVC = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+        self.window?.rootViewController = loginVC
+        self.window?.makeKeyAndVisible()
+    }
+    
+//    func startAuth() {
+//        let authVC = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+//        self.window?.rootViewController = authVC
+//        self.window?.makeKeyAndVisible()
+//    }
+    
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.

@@ -11,7 +11,7 @@ import FirebaseAuth
 
 class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    let cells = ["Друзья", "Группы", "Музыка"]
+    let cells = ["Друзья", "Сообщества", "Музыка", "Видео", "Курсы валют", "Игры"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +34,7 @@ class ProfileViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "goProfileDetail", sender: self)
+        performSegue(withIdentifier: "goDetailCellTVC", sender: self)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

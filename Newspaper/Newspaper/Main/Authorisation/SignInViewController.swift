@@ -13,11 +13,20 @@ final class SignInViewController: UIViewController {
 
     // MARK: - Outlets
     
+    var signUp = UIViewController(nibName: "SignUpViewController", bundle: nil)
+    var service = Service.shared
+    var tapGest: UITapGestureRecognizer?
+    var checkField = CheckField.shared
+    var userDefaults = UserDefaults.standard
+
     @IBOutlet weak var emailTF: UITextField!
+    @IBOutlet weak var emailView: UIView!
     @IBOutlet weak var passwordTF: UITextField!
+    @IBOutlet weak var passwordView: UIView!
     @IBOutlet weak var errorEmailLbl: UILabel!
     @IBOutlet weak var errorPassLbl: UILabel!
     @IBOutlet weak var enterBtn: UIButton!
+    @IBOutlet weak var mainView: UIImageView!
     
     private var isValidPassword = false
     private var isValidEmail = false
@@ -25,40 +34,58 @@ final class SignInViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.hidesBackButton = true
+        self.navigationItem.hidesBackButton = false
+        tapGest = UITapGestureRecognizer(target: self, action: #selector(endEditing))
+        mainView.addGestureRecognizer(tapGest!)
     }
     
     // MARK: - Actions
     
-    @IBAction func emailTFChanged(_ sender: UITextField) {
-        guard let email = emailTF.text else { return }
-        isValidEmail = VerificationService.isValidEmail(email: email)
-        errorEmailLbl.isHidden = isValidEmail
+    @objc func endEditing() {
+        self.view.endEditing(true)
     }
     
+    @IBAction func emailTFChanged(_ sender: UITextField) {
+    }
+   
     @IBAction func passTFChanged(_ sender: UITextField) {
-        guard let pass = passwordTF.text else { return }
-        errorPassLbl.isHidden = isValidPassword
     }
     
     @IBAction func signInBtnChanged(_ sender: UIButton) {
-        let email = emailTF.text!
-        let pass = passwordTF.text!
-        
-        if (!email.isEmpty && !pass.isEmpty) {
-            Auth.auth().signIn(withEmail: email, password: pass) { result, error in
-                if error == nil {
-                    self.dismiss(animated: true)
-                } else {
-                    let storyboard = UIStoryboard(name: "Test", bundle: nil)
-                    let vc = storyboard.instantiateViewController(withIdentifier: "TestViewController") as! TestViewController
-                    self.navigationController?.pushViewController(vc, animated: true)
+        if checkField.validField(emailView, emailTF), checkField.validField(passwordView, passwordTF) {
+            let authData = LoginField(email: emailTF.text!, password: passwordTF.text!)
+            service.authInApp(authData) { [weak self] responce in
+                switch responce {
+                case .success:
+                    print("next")
+                    self?.userDefaults.set(true, forKey: "isLogin")
+                    
+                case .noVerify:
+                    let alert = AlertService.shared.alertAction("Error", "Вы не верифицировали свой email. На вашу почту отправлена ссылка для верификации!")
+                    let okBtn = UIAlertAction(title: "Ok", style: .default)
+                    alert.addAction(okBtn)
+                    self?.present(alert, animated: true)
+                case .error:
+                    let alert = AlertService.shared.alertAction("Error", "Email или пароль не подходят")
+                    let okBtn = UIAlertAction(title: "Ok", style: .default)
+                    alert.addAction(okBtn)
+                    self?.present(alert, animated: true)
                 }
             }
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "OnboardingViewController")
+            self.navigationController?.pushViewController(vc, animated: true)
+        } else {
+            let alert = AlertService.shared.alertAction("Error", "Проверьте введённые данные")
+            let okBtn = UIAlertAction(title: "Ok", style: .default)
+            alert.addAction(okBtn)
+            self.present(alert, animated: true)
         }
     }
     
     @IBAction func goBackToRegistration(_ sender: UIButton) {
-        navigationController?.popToRootViewController(animated: true)
     }
+    
+    
+    
 }
